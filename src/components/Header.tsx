@@ -1,3 +1,5 @@
+import { person } from "@/data/content";
+
 const navLinks = [
   { href: "#now", label: "Nå" },
   { href: "#projects", label: "Prosjekter" },
@@ -14,7 +16,7 @@ export default function Header() {
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-white font-display font-bold text-sm">
             FA
           </span>
-          <span className="hidden sm:inline">Fredrik Almnes</span>
+          <span className="hidden sm:inline">{person.fullName}</span>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm text-muted">
           {navLinks.map((link) => (

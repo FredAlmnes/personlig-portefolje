@@ -1,5 +1,5 @@
 export const person = {
-  firstName: "Fredrik",
+  firstName: "Fredrik Christopher",
   lastName: "Almnes",
   fullName: "Fredrik Christopher Almnes",
   title: "Masterstudent, Datateknologi NTNU",

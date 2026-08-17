@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { person } from "@/data/content";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -21,9 +22,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fredrik Almnes — datateknologi ved NTNU, Trondheim",
-  description:
-    "Fredrik Almnes, datateknologistudent ved NTNU. Sideprosjekter, jobb og verv ved siden av studiene.",
+  title: `${person.fullName} — datateknologi ved NTNU, Trondheim`,
+  description: `${person.fullName}, datateknologistudent ved NTNU. Sideprosjekter, jobb og verv ved siden av studiene.`,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -16,8 +16,8 @@ export default function Hero() {
           </div>
         </FadeIn>
 
-        <h1 className="font-display font-semibold leading-[1.05] text-5xl md:text-7xl tracking-tight max-w-3xl">
-          <AnimatedWords text="Fredrik Almnes" delay={0.1} />
+        <h1 className="font-display font-semibold leading-[1.05] text-4xl md:text-6xl tracking-tight max-w-3xl">
+          <AnimatedWords text={`${person.firstName} ${person.lastName}`} delay={0.1} />
         </h1>
 
         <FadeIn delay={0.35}>
