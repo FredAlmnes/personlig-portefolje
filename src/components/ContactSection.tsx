@@ -32,6 +32,27 @@ export default function ContactSection() {
                 <div className="font-display font-medium text-lg">{person.location}</div>
               </div>
             </div>
+
+            <div className="flex flex-wrap gap-3 mt-10">
+              <a
+                href={person.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-white/30 px-5 py-2.5 text-sm font-medium hover:bg-white/10 transition-colors"
+              >
+                GitHub
+                <span aria-hidden>↗</span>
+              </a>
+              <a
+                href={person.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-white/30 px-5 py-2.5 text-sm font-medium hover:bg-white/10 transition-colors"
+              >
+                LinkedIn
+                <span aria-hidden>↗</span>
+              </a>
+            </div>
           </div>
         </FadeIn>
       </div>

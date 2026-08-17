@@ -7,6 +7,8 @@ export const person = {
   location: "Asker",
   email: "fredrik@almnes.no",
   phone: "484 67 792",
+  github: "https://github.com/FredAlmnes",
+  linkedin: "https://www.linkedin.com/in/fredrik-almnes-a36a60305/",
 };
 
 export const stats = [

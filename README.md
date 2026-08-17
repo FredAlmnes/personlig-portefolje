@@ -18,7 +18,6 @@ npm run dev
 
 ## Ting som gjenstår
 
-- Legg til GitHub- og LinkedIn-lenker i `src/data/content.ts` når du har dem klare.
 - Bytt ut placeholder-prosjektkortet ("Under arbeid") når neste prosjekt er klart.
 
 ## Deploy
