@@ -12,14 +12,15 @@ export const person = {
 };
 
 export const stats = [
-  { value: "4", label: "pågående roller" },
-  { value: "7", label: "erfaringer så langt" },
+  { value: "6", label: "pågående roller" },
+  { value: "9", label: "erfaringer så langt" },
   { value: "67,5", label: "studiepoeng fullført" },
   { value: "1", label: "prosjekt i drift" },
 ];
 
 export const nowTicker = [
   "Selger, Elkjøp Nordic",
+  "Leder, ITDAGENE",
   "Nestleder, Arrangementskomiteen Abakus",
   "Medutvikler, Kort Forklart",
   "Prosjektleder, hjelpesendinger Bulgaria",
@@ -46,9 +47,9 @@ export const nowCards = [
   {
     index: "03",
     eyebrow: "Verv og sideprosjekt",
-    title: "Arrangementskomiteen og Kort Forklart",
+    title: "ITDAGENE, Abakus og Kort Forklart",
     description:
-      "Nestleder i Abakus sin arrangementskomité, og medutvikler på læringsplattformen Kort Forklart.",
+      "Leder for ITDAGENE, nestleder i Abakus sin arrangementskomité og medlem av AbaInvest. Medutvikler på læringsplattformen Kort Forklart.",
     since: "løpende",
   },
 ];
@@ -104,6 +105,22 @@ export const experience: {
     place: "Agaia",
     period: "sommer 2023",
     description: "Praktisk utearbeid med anlegg og vedlikehold av grøntområder.",
+  },
+  {
+    category: "Frivillig",
+    role: "Leder, ITDAGENE",
+    place: "ITDAGENE, karrieredagene for IT-studenter ved NTNU",
+    period: "2026 – nå",
+    description:
+      "Planlegging og administrering av itDAGENE, herunder budsjettering av aktiviteter, styring av ledergruppen, og nettverkskontakt med partnerbedrifter.",
+  },
+  {
+    category: "Frivillig",
+    role: "Medlem, AbaInvest",
+    place: "AbaInvest, investeringsgruppen i Abakus",
+    period: "2026 – nå",
+    description:
+      "Diskuterer aksjer og analyserer selskaper sammen med gruppen, og er med på å forvalte en portefølje på rundt 200 000 kr.",
   },
   {
     category: "Frivillig",

@@ -3,9 +3,9 @@ import FadeIn from "./FadeIn";
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="border-t border-border py-24">
+    <section id="contact" data-voyage="12" className="border-t border-border py-24">
       <div className="mx-auto max-w-6xl px-6">
-        <FadeIn className="relative overflow-hidden rounded-3xl bg-accent px-8 py-16 md:px-16 md:py-20 text-white">
+        <FadeIn className="relative overflow-hidden rounded-3xl bg-accent-fill px-8 py-16 md:px-16 md:py-20 lg:px-12 lg:py-14 lg:max-w-[52%] text-white">
           <div className="pointer-events-none absolute -top-20 -right-20 h-72 w-72 rounded-full bg-white/10 blur-3xl animate-float" />
 
           <div className="relative">
@@ -14,7 +14,7 @@ export default function ContactSection() {
               Ta gjerne kontakt
             </h2>
 
-            <div className="grid sm:grid-cols-3 gap-8 border-t border-white/20 pt-8">
+            <div className="grid sm:grid-cols-3 lg:grid-cols-2 gap-8 border-t border-white/20 pt-8">
               <a href={`mailto:${person.email}`} className="group">
                 <div className="text-sm text-white/70 mb-2">E-post</div>
                 <div className="font-display font-medium text-lg group-hover:underline">
