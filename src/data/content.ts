@@ -33,7 +33,7 @@ export const nowCards = [
     eyebrow: "Studium",
     title: "Datateknologi, NTNU",
     description:
-      "5-årig sivilingeniørstudium ved Institutt for datateknologi og informatikk (IDI). For tiden i andre studieår.",
+      "5-årig sivilingeniørstudium ved Institutt for datateknologi og informatikk (IDI). For tiden i andre studieår, og tar Moderne maskinlæring i praksis dette semesteret.",
     since: "siden aug 2025",
   },
   {
@@ -190,12 +190,13 @@ export const studyPlan = [
     semesters: [
       {
         term: "Høst 2026",
-        credits: 30,
+        credits: 37.5,
         courses: [
           { code: "IT1901", name: "Informatikk prosjektarbeid I", credits: 7.5 },
           { code: "TDT4120", name: "Algoritmer og datastrukturer", credits: 7.5 },
           { code: "TDT4160", name: "Datamaskiner", credits: 7.5 },
           { code: "TMA4240", name: "Statistikk", credits: 7.5 },
+          { code: "TDT4173", name: "Moderne maskinlæring i praksis", credits: 7.5 },
         ],
       },
       {
