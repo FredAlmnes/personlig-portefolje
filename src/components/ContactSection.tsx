@@ -3,7 +3,7 @@ import FadeIn from "./FadeIn";
 
 export default function ContactSection() {
   return (
-    <section id="contact" data-voyage="12" className="border-t border-border py-24">
+    <section id="contact" data-voyage="16" className="border-t border-border py-24">
       <div className="mx-auto max-w-6xl px-6">
         <FadeIn className="relative overflow-hidden rounded-3xl border border-accent/30 bg-surface backdrop-blur-sm px-8 py-16 md:px-16 md:py-20 lg:px-12 lg:py-14 lg:max-w-[52%] shadow-[0_20px_60px_-30px_rgba(56,189,248,0.45)]">
           <div className="pointer-events-none absolute -top-20 -right-20 h-72 w-72 rounded-full bg-accent/15 blur-3xl animate-float" />

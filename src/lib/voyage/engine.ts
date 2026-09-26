@@ -8,8 +8,10 @@
         0  = kloden snurrer
         1  = kloden har stoppet over Oslo
         2  = zoomet inn, båten ligger i Oslo
-        3..11 = båten ligger i havn nr. 2..10 (Skagen ... Tenerife)
-        12 = zoomet ut, hele ruta vises
+        3..15 = båten ligger i havn nr. 2..14 (Skagen ... Tenerife)
+        16 = zoomet ut, hele ruta vises
+     (Generelt: havn nr. i ligger på steg i + 1, og oversikten kommer ett
+     steg etter siste havn.)
      Mellom to steg glir animasjonen jevnt. Mangler data-voyage helt,
      følger den bare hvor langt ned på siden man har scrollet.
    - Kartdataene hentes fra /voyage/*.json etter at motoren har startet.
@@ -40,7 +42,8 @@ import type {
 type LonLat = [number, number];
 type Box = [number, number, number, number];
 type Side = "r" | "l" | "b";
-type Stop = { name: string; country: string; at: LonLat; side: Side };
+// minor: småhavn som viker for de andre når navnene ikke får plass (f.eks. i oversikten)
+type Stop = { name: string; country: string; at: LonLat; side: Side; minor?: boolean };
 type Sea = { name: string; at: LonLat; angle: number; size?: number };
 type Palette = typeof PALETTES.day;
 type LandFC = FeatureCollection<Geometry, { b?: Box } | null>;
@@ -66,7 +69,12 @@ const CONFIG = {
     { name: "Guernsey", country: "Kanaløyene", at: [-2.518, 49.456], side: "r" },
     { name: "A Coruña", country: "Spania", at: [-8.375, 43.373], side: "r" },
     { name: "Vigo", country: "Spania", at: [-8.742, 42.247], side: "r" },
+    { name: "Viana do Castelo", country: "Portugal", at: [-8.835, 41.688], side: "r", minor: true },
     { name: "Porto", country: "Portugal", at: [-8.678, 41.147], side: "r" },
+    // Nazaré og Peniche er flyttet ut til vannkanten, havnene ligger på land i kystdataene
+    { name: "Nazaré", country: "Portugal", at: [-9.092, 39.586], side: "r", minor: true },
+    { name: "Peniche", country: "Portugal", at: [-9.382, 39.349], side: "r", minor: true },
+    { name: "Cascais", country: "Portugal", at: [-9.418, 38.692], side: "r", minor: true },
     { name: "Lisboa", country: "Portugal", at: [-9.14, 38.698], side: "r" },
     { name: "Faro", country: "Portugal", at: [-7.925, 36.995], side: "r" },
     { name: "Tenerife", country: "Kanariøyene", at: [-16.225, 28.465], side: "b" },
@@ -78,8 +86,12 @@ const CONFIG = {
     [[4.84,52.405],[4.78,52.42],[4.70,52.435],[4.62,52.46],[4.54,52.463],[4.30,52.40],[3.4,51.9],[2.3,51.35],[1.45,51.0],[0.5,50.55],[-0.8,50.25],[-1.8,49.9],[-2.35,49.60],[-2.45,49.50],[-2.505,49.462]],
     [[-2.51,49.44],[-2.60,49.40],[-3.5,49.2],[-5.0,48.75],[-5.5,48.35],[-6.0,47.3],[-7.5,45.5],[-8.3,44.2],[-8.42,43.52],[-8.39,43.44],[-8.37,43.40]],
     [[-8.37,43.40],[-8.43,43.435],[-8.60,43.42],[-9.0,43.40],[-9.40,43.10],[-9.45,42.80],[-9.10,42.30],[-8.95,42.215],[-8.85,42.225],[-8.78,42.242]],
-    [[-8.78,42.242],[-8.85,42.225],[-8.97,42.15],[-9.00,41.80],[-8.85,41.35],[-8.76,41.20],[-8.70,41.155]],
-    [[-8.72,41.14],[-8.80,41.10],[-9.15,40.50],[-9.45,39.70],[-9.65,39.35],[-9.62,38.80],[-9.42,38.64],[-9.33,38.672],[-9.25,38.688],[-9.18,38.694]],
+    [[-8.78,42.242],[-8.85,42.225],[-8.97,42.15],[-9.00,41.85],[-8.92,41.70],[-8.87,41.683]],
+    [[-8.87,41.683],[-8.92,41.66],[-8.90,41.40],[-8.80,41.20],[-8.72,41.155]],
+    [[-8.72,41.14],[-8.80,41.10],[-9.10,40.50],[-9.20,39.90],[-9.17,39.66],[-9.12,39.595]],
+    [[-9.12,39.578],[-9.20,39.52],[-9.36,39.42],[-9.44,39.37],[-9.43,39.34],[-9.40,39.343]],
+    [[-9.40,39.343],[-9.45,39.30],[-9.52,39.05],[-9.56,38.80],[-9.52,38.69],[-9.46,38.675]],
+    [[-9.40,38.678],[-9.34,38.668],[-9.30,38.672],[-9.25,38.688],[-9.18,38.694]],
     [[-9.18,38.694],[-9.25,38.686],[-9.33,38.670],[-9.42,38.62],[-9.35,38.40],[-9.00,37.80],[-9.10,37.10],[-8.95,36.90],[-8.40,36.975],[-8.05,36.975]],
     [[-7.96,36.992],[-8.01,36.975],[-8.04,36.94],[-8.30,36.60],[-10.5,34.3],[-13.2,31.0],[-15.2,29.2],[-16.0,28.62],[-16.10,28.52],[-16.18,28.49],[-16.21,28.472]],
   ] as LonLat[][],
@@ -699,8 +711,15 @@ export function initVoyage(el: HTMLElement): () => void {
     if (T >= 1 && T < 2) docked = 0;
     else if (cam.leg >= 0) docked = cam.s <= 0 ? cam.leg : cam.s >= 1 ? cam.leg + 1 : -1;
 
-    // havnene
+    // havnene (små navn samles opp og tegnes etterpå, uten overlapp)
     const osloA = clamp((T - 0.78) / 0.2);
+    const taken: [number, number, number, number][] = [];
+    const small: { x: number; y: number; st: Stop; a: number; i: number }[] = [];
+    const take = (x0: number, y0: number, x1: number, y1: number) => {
+      if (taken.some((r) => x0 < r[2] && x1 > r[0] && y0 < r[3] && y1 > r[1])) return false;
+      taken.push([x0, y0, x1, y1]);
+      return true;
+    };
     STOPS.forEach((st, i) => {
       const show = i === 0 ? Math.max(osloA, routeA) : routeA;
       if (show <= 0 || !visible(cam, st.at)) return;
@@ -717,10 +736,25 @@ export function initVoyage(el: HTMLElement): () => void {
       }
       c.globalAlpha = 1;
       const dockOff = 40 * bs + 8;
-      if (i === 0 && T < 2) label(c, xy[0], xy[1], st, true, osloA, st.side, lerp(12, dockOff, clamp((T - 1.4) / 0.35)));
-      else if (i === docked) label(c, xy[0], xy[1], st, true, show, st.side, dockOff);
-      else if (reached) label(c, xy[0], xy[1], st, false, show * 0.95, st.side, 10);
+      const big = (i === 0 && T < 2) || i === docked;
+      if (big) {
+        const off = i === 0 && T < 2 ? lerp(12, dockOff, clamp((T - 1.4) / 0.35)) : dockOff;
+        c.font = "600 21px " + SANS;
+        const w = c.measureText(st.name).width;
+        const x0 = st.side === "b" ? xy[0] - w / 2 : xy[0] + off, y0 = st.side === "b" ? xy[1] + 12 : xy[1] - 20;
+        taken.push([x0, y0, x0 + w, y0 + 40]);
+        label(c, xy[0], xy[1], st, true, i === 0 && T < 2 ? osloA : show, st.side, off);
+      } else if (reached) small.push({ x: xy[0], y: xy[1], st, a: show * 0.95, i });
     });
+    c.font = "600 14px " + SANS;
+    small
+      .sort((a, b) => Number(!!a.st.minor) - Number(!!b.st.minor) || a.i - b.i)
+      .forEach(({ x, y, st, a }) => {
+        const w = c.measureText(st.name).width + 4;
+        const ok = st.side === "b" ? take(x - w / 2, y + 7, x + w / 2, y + 23) : take(x + 8, y - 9, x + 12 + w, y + 9);
+        if (ok) label(c, x, y, st, false, a, st.side, 10);
+        c.font = "600 14px " + SANS;
+      });
 
     // puls over Oslo når kloden stopper
     const pulseA = clamp((T - 0.8) / 0.15) * (1 - clamp((T - 1.7) / 0.4));

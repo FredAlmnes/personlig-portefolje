@@ -4,7 +4,7 @@ import SectionHeading from "./SectionHeading";
 
 export default function SkillsSection() {
   return (
-    <section id="skills" data-voyage="11" className="border-t border-border py-24">
+    <section id="skills" data-voyage="15" className="border-t border-border py-24">
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid md:grid-cols-[1fr_1.2fr] lg:grid-cols-1 lg:max-w-[52%] gap-10 md:gap-16 lg:gap-10">
           <div>

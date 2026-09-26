@@ -4,7 +4,7 @@ import SectionHeading from "./SectionHeading";
 
 export default function StudySection() {
   return (
-    <section id="study" data-voyage="9" className="border-t border-border py-24">
+    <section id="study" data-voyage="12" className="border-t border-border py-24">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
           eyebrow="NTNU · MTDT"
