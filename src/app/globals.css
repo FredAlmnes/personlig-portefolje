@@ -7,7 +7,34 @@
   --muted: #5c6b7a;
   --accent: #0ea5e9;
   --accent-soft: #e0f2fe;
+  --accent-fill: #0ea5e9;
+  --accent-fill-hover: #0284c7;
   --border: #e3ecf3;
+  --surface: rgba(255, 255, 255, 0.9);
+  --ok: #059669;
+  --ok-soft: #ecfdf5;
+  --edu: #7c3aed;
+  --edu-soft: #f5f3ff;
+}
+
+/* Mørkt tema: slås på med data-theme="dark" på <html> (se layout.tsx).
+   Kartet i VoyageBackground bytter til nattpaletten av seg selv. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #08111d;
+  --bg-alt: #0b1b2e;
+  --fg: #e4edf6;
+  --muted: #a7b6c8;
+  --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.14);
+  --accent-fill: #0284c7;
+  --accent-fill-hover: #0369a1;
+  --border: rgba(228, 237, 246, 0.12);
+  --surface: rgba(11, 27, 46, 0.72);
+  --ok: #34d399;
+  --ok-soft: rgba(52, 211, 153, 0.12);
+  --edu: #a78bfa;
+  --edu-soft: rgba(167, 139, 250, 0.14);
 }
 
 @theme inline {
@@ -17,6 +44,13 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-fill: var(--accent-fill);
+  --color-accent-fill-hover: var(--accent-fill-hover);
+  --color-surface: var(--surface);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-edu: var(--edu);
+  --color-edu-soft: var(--edu-soft);
   --color-border: var(--border);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
@@ -65,4 +99,65 @@ body {
 
 .animate-float-slow {
   animation: float-slow 14s ease-in-out infinite;
+}
+
+/* Seiltur-bakgrunnen (VoyageBackground). Kartet dempes så teksten oppå
+   holder god kontrast; ruta og båten får stå litt sterkere. */
+.voyage-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--bg-alt);
+}
+.voyage-bg canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.voyage-bg[data-ready] .voyage-map {
+  opacity: 0.55;
+}
+.voyage-bg[data-ready] .voyage-overlay {
+  opacity: 0.9;
+}
+/* Smal skjerm: innholdet dekker hele bredden, så kartet dempes mer */
+@media (max-width: 859px) {
+  .voyage-bg[data-ready] .voyage-map {
+    opacity: 0.4;
+  }
+  .voyage-bg[data-ready] .voyage-overlay {
+    opacity: 0.6;
+  }
+}
+/* Lys halo rundt tekst som ligger rett på kartet */
+.on-map {
+  text-shadow:
+    0 0 2px var(--bg),
+    0 0 10px var(--bg),
+    0 0 18px var(--bg);
+}
+/* Nattkartet har lavere kontrast i seg selv, så det tåler å stå sterkere */
+:root[data-theme="dark"] .voyage-bg[data-ready] .voyage-map {
+  opacity: 0.8;
+}
+:root[data-theme="dark"] .voyage-bg[data-ready] .voyage-overlay {
+  opacity: 0.95;
+}
+@media (max-width: 859px) {
+  :root[data-theme="dark"] .voyage-bg[data-ready] .voyage-map {
+    opacity: 0.5;
+  }
+  :root[data-theme="dark"] .voyage-bg[data-ready] .voyage-overlay {
+    opacity: 0.55;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .voyage-bg canvas {
+    transition: none;
+  }
 }

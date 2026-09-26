@@ -7,12 +7,14 @@ import StudySection from "@/components/StudySection";
 import SkillsSection from "@/components/SkillsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import VoyageBackground from "@/components/VoyageBackground";
 
 export default function Home() {
   return (
     <>
+      <VoyageBackground />
       <Header />
-      <main>
+      <main className="relative z-10">
         <Hero />
         <NowSection />
         <ProjectsSection />
@@ -21,7 +23,9 @@ export default function Home() {
         <SkillsSection />
         <ContactSection />
       </main>
-      <Footer />
+      <div className="relative z-10">
+        <Footer />
+      </div>
     </>
   );
 }

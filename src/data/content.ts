@@ -12,14 +12,15 @@ export const person = {
 };
 
 export const stats = [
-  { value: "4", label: "pågående roller" },
-  { value: "7", label: "erfaringer så langt" },
+  { value: "6", label: "pågående roller" },
+  { value: "9", label: "erfaringer så langt" },
   { value: "67,5", label: "studiepoeng fullført" },
   { value: "1", label: "prosjekt i drift" },
 ];
 
 export const nowTicker = [
   "Selger, Elkjøp Nordic",
+  "Leder, ITDAGENE",
   "Nestleder, Arrangementskomiteen Abakus",
   "Medutvikler, Kort Forklart",
   "Prosjektleder, hjelpesendinger Bulgaria",
@@ -32,7 +33,7 @@ export const nowCards = [
     eyebrow: "Studium",
     title: "Datateknologi, NTNU",
     description:
-      "5-årig sivilingeniørstudium ved Institutt for datateknologi og informatikk (IDI). For tiden i andre studieår.",
+      "5-årig sivilingeniørstudium ved Institutt for datateknologi og informatikk (IDI). For tiden i andre studieår, og tar Moderne maskinlæring i praksis dette semesteret.",
     since: "siden aug 2025",
   },
   {
@@ -46,9 +47,9 @@ export const nowCards = [
   {
     index: "03",
     eyebrow: "Verv og sideprosjekt",
-    title: "Arrangementskomiteen og Kort Forklart",
+    title: "ITDAGENE, Abakus og Kort Forklart",
     description:
-      "Nestleder i Abakus sin arrangementskomité, og medutvikler på læringsplattformen Kort Forklart.",
+      "Leder for ITDAGENE, nestleder i Abakus sin arrangementskomité og medlem av AbaInvest. Medutvikler på læringsplattformen Kort Forklart.",
     since: "løpende",
   },
 ];
@@ -104,6 +105,22 @@ export const experience: {
     place: "Agaia",
     period: "sommer 2023",
     description: "Praktisk utearbeid med anlegg og vedlikehold av grøntområder.",
+  },
+  {
+    category: "Frivillig",
+    role: "Leder, ITDAGENE",
+    place: "ITDAGENE, karrieredagene for IT-studenter ved NTNU",
+    period: "2026 – nå",
+    description:
+      "Planlegging og administrering av itDAGENE, herunder budsjettering av aktiviteter, styring av ledergruppen, og nettverkskontakt med partnerbedrifter.",
+  },
+  {
+    category: "Frivillig",
+    role: "Medlem, AbaInvest",
+    place: "AbaInvest, investeringsgruppen i Abakus",
+    period: "2026 – nå",
+    description:
+      "Diskuterer aksjer og analyserer selskaper sammen med gruppen, og er med på å forvalte en portefølje på rundt 200 000 kr.",
   },
   {
     category: "Frivillig",
@@ -173,12 +190,13 @@ export const studyPlan = [
     semesters: [
       {
         term: "Høst 2026",
-        credits: 30,
+        credits: 37.5,
         courses: [
           { code: "IT1901", name: "Informatikk prosjektarbeid I", credits: 7.5 },
           { code: "TDT4120", name: "Algoritmer og datastrukturer", credits: 7.5 },
           { code: "TDT4160", name: "Datamaskiner", credits: 7.5 },
           { code: "TMA4240", name: "Statistikk", credits: 7.5 },
+          { code: "TDT4173", name: "Moderne maskinlæring i praksis", credits: 7.5 },
         ],
       },
       {
