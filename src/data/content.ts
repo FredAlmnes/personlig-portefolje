@@ -78,12 +78,13 @@ export const projects = [
   {
     tag: "Under utvikling",
     title: "NBA value bets med maskinlæring",
-    link: "https://github.com/FredAlmnes/Nba-ML-betting",
-    linkLabel: "GitHub",
+    link: "https://nba-ml-betting.vercel.app",
+    linkLabel: "nba-ml-betting.vercel.app",
+    repo: "https://github.com/FredAlmnes/Nba-ML-betting",
     description:
       "En bot som leter etter value bets i NBA. En kalibrert XGBoost-modell trent på historisk kampstatistikk anslår vinnersjansen, og boten flagger kamper der bookmakerens odds er for høye. Kamper der nøkkelspillere er skadet filtreres bort, innsatsen styres med halv Kelly, og strategien testes mot historiske odds. Kjører foreløpig bare med papirpenger.",
     stack: ["Python", "XGBoost", "scikit-learn", "pandas", "nba_api"],
-    cta: "Se koden",
+    cta: "Åpne dashboardet",
   },
 ];
 
