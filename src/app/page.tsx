@@ -5,6 +5,7 @@ import ProjectsSection from "@/components/ProjectsSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import StudySection from "@/components/StudySection";
 import SkillsSection from "@/components/SkillsSection";
+import GallerySection from "@/components/GallerySection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import VoyageBackground from "@/components/VoyageBackground";
@@ -21,6 +22,7 @@ export default function Home() {
         <ExperienceSection />
         <StudySection />
         <SkillsSection />
+        <GallerySection />
         <ContactSection />
       </main>
       <div className="relative z-10">

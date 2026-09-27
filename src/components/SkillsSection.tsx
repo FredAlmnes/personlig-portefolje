@@ -1,4 +1,4 @@
-import { profile, skillGroups } from "@/data/content";
+import { skillGroups } from "@/data/content";
 import FadeIn from "./FadeIn";
 import SectionHeading from "./SectionHeading";
 
@@ -6,13 +6,8 @@ export default function SkillsSection() {
   return (
     <section id="skills" data-voyage="15" className="border-t border-border py-24">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="grid md:grid-cols-[1fr_1.2fr] lg:grid-cols-1 lg:max-w-[52%] gap-10 md:gap-16 lg:gap-10">
-          <div>
-            <SectionHeading eyebrow="Profil" title="Ferdigheter." />
-            <FadeIn>
-              <p className="on-map text-muted max-w-md leading-relaxed">{profile}</p>
-            </FadeIn>
-          </div>
+        <div className="lg:max-w-[52%]">
+          <SectionHeading eyebrow="Profil" title="Ferdigheter." />
 
           <div className="grid sm:grid-cols-2 gap-8">
             {skillGroups.map((group, i) => (

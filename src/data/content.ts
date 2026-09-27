@@ -1,3 +1,13 @@
+import type { StaticImageData } from "next/image";
+import seilbaten from "@/assets/gallery/seilbaten.jpg";
+import familieferie from "@/assets/gallery/familieferie.jpg";
+import fjelltur from "@/assets/gallery/fjelltur.jpg";
+import arrkom from "@/assets/gallery/arrkom.jpg";
+import grunderjakten from "@/assets/gallery/grunderjakten.jpg";
+import pitching from "@/assets/gallery/pitching.jpg";
+import cruise from "@/assets/gallery/cruise.jpg";
+import gutta from "@/assets/gallery/gutta.jpg";
+
 export const person = {
   firstName: "Fredrik Christopher",
   lastName: "Almnes",
@@ -232,5 +242,47 @@ export const skillGroups = [
   },
 ];
 
-export const profile =
-  "Datateknologistudent (2. år av 5-årig integrert master) ved NTNU med bred teknisk kompetanse innen programmering og webutvikling, kombinert med solid erfaring fra prosjektledelse og verv. Jeg søker sommerjobb 2027 innen teknologi, konsulentvirksomhet eller økonomi, og trives i roller som kombinerer faglig problemløsning med struktur og samarbeid.";
+// Bildekarusellen over kontaktseksjonen. Nye bilder legges i src/assets/gallery/
+// (gjerne maks ca. 1600 px og noen hundre KB) og importeres øverst i filen.
+export const gallery: { src: StaticImageData; alt: string; caption: string }[] = [
+  {
+    src: seilbaten,
+    alt: "Silhuett av en person i baugen på en seilbåt som ser ut over havet i solnedgang",
+    caption: "Seilbåten",
+  },
+  {
+    src: familieferie,
+    alt: "Familien rundt et langbord med pizza på en fortauskafé i en spansk gate",
+    caption: "Familien på ferie",
+  },
+  {
+    src: fjelltur,
+    alt: "Tre personer i turjakker og solbriller tar selfie på en steinete fjelltopp med utsikt over skog og vann",
+    caption: "Fjelltur",
+  },
+  {
+    src: arrkom,
+    alt: "Fem personer fra Arrangementskomiteen rundt et bord med mat utenfor et hvitt trehus i kveldssol",
+    caption: "Arrkom",
+  },
+  {
+    src: grunderjakten,
+    alt: "Fem personer jubler under et neonskilt med teksten Pitchers Corner, en av dem holder pokalen for seieren i pitchekonkurransen",
+    caption: "Vant pitchekonkurransen i Gründerjakten",
+  },
+  {
+    src: pitching,
+    alt: "En person presenterer en app-idé foran en skjerm med overskriften Appen arrangerer",
+    caption: "Pitching i Gründerjakten",
+  },
+  {
+    src: cruise,
+    alt: "To personer smiler ved et bord med champagneglass om bord på en båt, med en opplyst by i bakgrunnen",
+    caption: "Cruise",
+  },
+  {
+    src: gutta,
+    alt: "Fem venner samlet i en sofa på en fest",
+    caption: "Gutta",
+  },
+];

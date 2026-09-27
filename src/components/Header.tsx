@@ -6,6 +6,7 @@ const navLinks = [
   { href: "#experience", label: "Erfaring" },
   { href: "#study", label: "Studiet" },
   { href: "#skills", label: "Ferdigheter" },
+  { href: "#bilder", label: "Bilder" },
 ];
 
 export default function Header() {
