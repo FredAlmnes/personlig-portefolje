@@ -18,7 +18,7 @@ export default function ProjectsSection() {
               <div className="rounded-2xl border border-border bg-surface backdrop-blur-sm p-8 md:p-10 grid md:grid-cols-[1fr_auto] gap-8 items-start hover:border-accent/40 hover:shadow-[0_8px_30px_-12px_rgba(14,165,233,0.25)] transition-all">
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="rounded-full bg-accent-soft text-accent px-3 py-1 text-xs font-medium">
+                    <span className="rounded-full bg-accent-soft text-accent px-3 py-1 text-xs font-medium whitespace-nowrap">
                       {project.tag}
                     </span>
                     <span className="text-sm text-muted">{project.linkLabel}</span>
@@ -37,15 +37,28 @@ export default function ProjectsSection() {
                   </div>
                 </div>
 
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-accent-fill text-white px-5 py-3 text-sm font-medium hover:bg-accent-fill-hover transition-colors h-fit whitespace-nowrap"
-                >
-                  {project.cta}
-                  <span aria-hidden>↗</span>
-                </a>
+                <div className="flex flex-wrap md:flex-col gap-3 h-fit">
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-accent-fill text-white px-5 py-3 text-sm font-medium hover:bg-accent-fill-hover transition-colors whitespace-nowrap"
+                  >
+                    {project.cta}
+                    <span aria-hidden>↗</span>
+                  </a>
+                  {project.repo && (
+                    <a
+                      href={project.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-medium text-fg hover:border-accent hover:text-accent transition-colors whitespace-nowrap"
+                    >
+                      Se koden
+                      <span aria-hidden>↗</span>
+                    </a>
+                  )}
+                </div>
               </div>
             </FadeIn>
           ))}
