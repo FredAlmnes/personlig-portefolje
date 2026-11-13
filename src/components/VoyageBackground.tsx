@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-// Scroll-styrt seiltur (Oslo → Tenerife) som ligger fast bak innholdet.
+// Scroll-styrt seiltur (Oslo → Tenerife → Barbados) som ligger fast bak innholdet.
 // Motoren (d3-geo + topojson) og kartdataene lastes først etter at siden har
 // rendret, så ingen av delene havner i hovedbundelen.
 export default function VoyageBackground() {
