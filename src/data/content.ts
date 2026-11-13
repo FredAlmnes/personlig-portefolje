@@ -21,25 +21,8 @@ export const person = {
   linkedin: "https://www.linkedin.com/in/fredrik-almnes-a36a60305/",
 };
 
-export const stats = [
-  { value: "6", label: "pågående roller" },
-  { value: "9", label: "erfaringer så langt" },
-  { value: "67,5", label: "studiepoeng fullført" },
-  { value: "1", label: "prosjekt i drift" },
-];
-
-export const nowTicker = [
-  "Selger, Elkjøp Nordic",
-  "Leder, ITDAGENE",
-  "Nestleder, Arrangementskomiteen Abakus",
-  "Medutvikler, Kort Forklart",
-  "Prosjektleder, hjelpesendinger Bulgaria",
-  "Masterstudent, NTNU",
-];
-
 export const nowCards = [
   {
-    index: "01",
     eyebrow: "Studium",
     title: "Datateknologi, NTNU",
     description:
@@ -47,7 +30,6 @@ export const nowCards = [
     since: "siden aug 2025",
   },
   {
-    index: "02",
     eyebrow: "Jobb ved siden av",
     title: "Selger og studass",
     description:
@@ -55,7 +37,6 @@ export const nowCards = [
     since: "siden aug 2024",
   },
   {
-    index: "03",
     eyebrow: "Verv og sideprosjekt",
     title: "ITDAGENE, Abakus og Kort Forklart",
     description:
@@ -249,7 +230,7 @@ export const skillGroups = [
   },
   {
     title: "Språk",
-    items: ["Norsk — morsmål", "Engelsk — flytende"],
+    items: ["Norsk (morsmål)", "Engelsk (flytende)"],
   },
 ];
 

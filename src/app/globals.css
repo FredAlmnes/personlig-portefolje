@@ -1,40 +1,32 @@
 @import "tailwindcss";
 
+/* Lyst tema: dagkartets papirfarge og blekk (se PAL i src/lib/voyage/engine.ts). */
 :root {
-  --bg: #ffffff;
-  --bg-alt: #f2f8fd;
-  --fg: #0b1521;
-  --muted: #5c6b7a;
-  --accent: #0ea5e9;
-  --accent-soft: #e0f2fe;
-  --accent-fill: #0ea5e9;
-  --accent-fill-hover: #0284c7;
-  --border: #e3ecf3;
-  --surface: rgba(255, 255, 255, 0.9);
-  --ok: #059669;
-  --ok-soft: #ecfdf5;
-  --edu: #7c3aed;
-  --edu-soft: #f5f3ff;
+  --bg: #f2f8fd;
+  --bg-alt: #eaf4f9;
+  --fg: #17233b;
+  --muted: #4f5e70;
+  --faint: #6b7889;
+  --accent: #c2177d;
+  --border: rgba(23, 35, 59, 0.14);
+  --surface: rgba(242, 248, 253, 0.85);
+  /* Alias for kartmotoren og eldre kode: display-fonten er serifen. */
+  --font-display: var(--font-serif);
 }
 
 /* Mørkt tema: slås på med data-theme="dark" på <html> (se layout.tsx).
-   Kartet i VoyageBackground bytter til nattpaletten av seg selv. */
+   Kartet i VoyageBackground bytter til nattpaletten av seg selv.
+   --bg må være lik nattkartets papirfarge (#08111d). */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #08111d;
   --bg-alt: #0b1b2e;
-  --fg: #e4edf6;
-  --muted: #a7b6c8;
-  --accent: #38bdf8;
-  --accent-soft: rgba(56, 189, 248, 0.14);
-  --accent-fill: #0284c7;
-  --accent-fill-hover: #0369a1;
-  --border: rgba(228, 237, 246, 0.12);
-  --surface: rgba(11, 27, 46, 0.72);
-  --ok: #34d399;
-  --ok-soft: rgba(52, 211, 153, 0.12);
-  --edu: #a78bfa;
-  --edu-soft: rgba(167, 139, 250, 0.14);
+  --fg: #ebe7df;
+  --muted: #a3b0bf;
+  --faint: #6f7f91;
+  --accent: #f06aae;
+  --border: rgba(235, 231, 223, 0.12);
+  --surface: rgba(8, 17, 29, 0.72);
 }
 
 @theme inline {
@@ -42,63 +34,67 @@
   --color-bg-alt: var(--bg-alt);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
+  --color-faint: var(--faint);
   --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
-  --color-accent-fill: var(--accent-fill);
-  --color-accent-fill-hover: var(--accent-fill-hover);
-  --color-surface: var(--surface);
-  --color-ok: var(--ok);
-  --color-ok-soft: var(--ok-soft);
-  --color-edu: var(--edu);
-  --color-edu-soft: var(--edu-soft);
   --color-border: var(--border);
-  --font-display: var(--font-display);
+  --color-surface: var(--surface);
+  --font-serif: var(--font-serif);
+  --font-display: var(--font-serif);
   --font-body: var(--font-body);
   --font-mono: var(--font-mono);
 }
 
-* {
-  border-color: var(--border);
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: var(--bg);
-  color: var(--fg);
-}
-
-.bg-dot-grid {
-  background-image: radial-gradient(rgba(14, 165, 233, 0.18) 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
+@layer base {
+  * {
+    border-color: var(--border);
   }
-  50% {
-    transform: translate(-16px, 20px) scale(1.05);
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 28%, transparent);
+    color: var(--fg);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 3px;
   }
 }
 
-.animate-float {
-  animation: float 10s ease-in-out infinite;
-}
-
-@keyframes float-slow {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
+@layer components {
+  /* Tekstlenke: blekkfarget med tynn understrek som blir aksentfarget ved hover. */
+  .link {
+    color: var(--fg);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--faint);
+    transition:
+      color 0.2s ease,
+      text-decoration-color 0.2s ease;
   }
-  50% {
-    transform: translate(18px, -14px) scale(1.08);
+  .link:hover,
+  .link:focus-visible {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
   }
-}
 
-.animate-float-slow {
-  animation: float-slow 14s ease-in-out infinite;
+  /* Liten metadata-etikett i mono, som påskriftene på et sjøkart. */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
 }
 
 /* Seiltur-bakgrunnen (VoyageBackground). Kartet dempes så teksten oppå
@@ -134,13 +130,6 @@ body {
     opacity: 0.6;
   }
 }
-/* Lys halo rundt tekst som ligger rett på kartet */
-.on-map {
-  text-shadow:
-    0 0 2px var(--bg),
-    0 0 10px var(--bg),
-    0 0 18px var(--bg);
-}
 /* Nattkartet har lavere kontrast i seg selv, så det tåler å stå sterkere */
 :root[data-theme="dark"] .voyage-bg[data-ready] .voyage-map {
   opacity: 0.8;
@@ -156,7 +145,36 @@ body {
     opacity: 0.55;
   }
 }
+
+/* Lesbarhetsslør mellom kartet og innholdet (se page.tsx). På store skjermer
+   ligger teksten i venstre kolonne, så sløret tones ut mot høyre der kartet
+   får stå fritt. På smale skjermer dekker teksten alt, så sløret er jevnt. */
+.map-scrim {
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+@media (min-width: 64rem) {
+  .map-scrim {
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--bg) 92%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 80%, transparent) 40%,
+      transparent 60%
+    );
+  }
+}
+
+/* Halo rundt tekst som ligger rett på kartet */
+.on-map {
+  text-shadow:
+    0 0 2px var(--bg),
+    0 0 10px var(--bg),
+    0 0 18px var(--bg);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .voyage-bg canvas {
     transition: none;
   }

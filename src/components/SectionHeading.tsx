@@ -10,15 +10,10 @@ export default function SectionHeading({
   subtitle?: string;
 }) {
   return (
-    <FadeIn className="mb-14 on-map">
-      {eyebrow && (
-        <div className="mb-3 flex items-center gap-2 text-sm font-medium text-accent">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-          {eyebrow}
-        </div>
-      )}
-      <h2 className="font-display font-semibold text-3xl md:text-4xl tracking-tight">{title}</h2>
-      {subtitle && <p className="mt-4 max-w-lg text-muted">{subtitle}</p>}
+    <FadeIn className="mb-12 on-map">
+      {eyebrow && <p className="label mb-3">{eyebrow}</p>}
+      <h2 className="font-serif font-normal text-3xl md:text-4xl tracking-tight text-fg">{title}</h2>
+      {subtitle && <p className="mt-4 max-w-lg text-muted leading-relaxed">{subtitle}</p>}
     </FadeIn>
   );
 }

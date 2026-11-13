@@ -7,25 +7,18 @@ export default function SkillsSection() {
     <section id="skills" data-voyage="15" className="border-t border-border py-24">
       <div className="mx-auto max-w-6xl px-6">
         <div className="lg:max-w-[52%]">
-          <SectionHeading eyebrow="Profil" title="Ferdigheter." />
+          <SectionHeading eyebrow="Profil" title="Ferdigheter" />
 
-          <div className="grid sm:grid-cols-2 gap-8">
-            {skillGroups.map((group, i) => (
-              <FadeIn key={group.title} delay={i * 0.08}>
-                <div className="on-map text-sm font-medium text-accent mb-3">{group.title}</div>
-                <div className="flex flex-wrap gap-2">
-                  {group.items.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-full border border-border bg-bg-alt px-3.5 py-1.5 text-sm text-fg hover:border-accent hover:text-accent transition-colors"
-                    >
-                      {item}
-                    </span>
-                  ))}
+          <FadeIn>
+            <dl className="on-map grid gap-8 sm:grid-cols-2">
+              {skillGroups.map((group) => (
+                <div key={group.title} className="border-t border-border pt-4">
+                  <dt className="label">{group.title}</dt>
+                  <dd className="mt-2 text-fg">{group.items.join(" · ")}</dd>
                 </div>
-              </FadeIn>
-            ))}
-          </div>
+              ))}
+            </dl>
+          </FadeIn>
         </div>
       </div>
     </section>
