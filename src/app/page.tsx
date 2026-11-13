@@ -14,6 +14,8 @@ export default function Home() {
   return (
     <>
       <VoyageBackground />
+      {/* Lesbarhetsslør mellom kartet og innholdet, se .map-scrim i globals.css */}
+      <div aria-hidden="true" className="map-scrim pointer-events-none fixed inset-0 z-[1]" />
       <Header />
       <main className="relative z-10">
         <Hero />

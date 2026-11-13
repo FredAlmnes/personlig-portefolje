@@ -66,7 +66,7 @@ export default function PhotoCarousel() {
   const interact = () => { lastInteract.current = Date.now(); };
 
   const btn =
-    "flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface text-fg backdrop-blur-sm transition-colors hover:border-accent hover:text-accent";
+    "flex h-9 w-9 items-center justify-center rounded-sm border border-border bg-bg/60 text-muted transition-colors hover:border-fg/40 hover:text-fg";
 
   return (
     <div
@@ -81,19 +81,19 @@ export default function PhotoCarousel() {
         onPointerDown={interact}
         onWheel={interact}
         onKeyDown={interact}
-        className="relative flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 [scrollbar-width:thin] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent rounded-2xl"
+        className="relative flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 [scrollbar-width:thin] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent rounded-sm"
       >
         {gallery.map((photo) => (
           <li key={photo.caption} className="snap-start shrink-0">
-            <figure className="rounded-2xl border border-border bg-surface backdrop-blur-sm p-2">
+            <figure>
               <Image
                 src={photo.src}
                 alt={photo.alt}
                 placeholder="blur"
                 sizes="(max-width: 768px) 80vw, 480px"
-                className="h-72 md:h-80 w-auto rounded-xl object-cover"
+                className="h-72 md:h-80 w-auto rounded-sm object-cover"
               />
-              <figcaption className="px-2 pt-3 pb-1 text-sm text-muted">{photo.caption}</figcaption>
+              <figcaption className="pt-2 text-sm text-muted">{photo.caption}</figcaption>
             </figure>
           </li>
         ))}

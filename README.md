@@ -2,7 +2,8 @@
 
 Personlig porteføljenettside bygget med Next.js 16, React 19, TypeScript og Tailwind CSS 4.
 Bak innholdet ligger en scroll-styrt seiltur: en jordklode som stopper over Oslo, og en
-seilbåt som seiler videre til Tenerife mens man scroller nedover siden.
+seilbåt som seiler videre til Tenerife og over Atlanterhavet til Barbados mens man scroller
+nedover siden.
 
 ## Kom i gang
 
@@ -36,7 +37,9 @@ Andre kommandoer:
   `initVoyage(el)` starter den og returnerer en `destroy()`-funksjon som rydder opp.
   Havnene og veipunktene mellom dem ligger i `CONFIG` øverst i filen.
 - `public/voyage/land-*.json` — kartdata (TopoJSON) i flere detaljnivåer. De hentes med
-  `fetch` og er ikke en del av JavaScript-bundelen.
+  `fetch` og er ikke en del av JavaScript-bundelen. Detaljlagene dekker Europa og Kanariøyene
+  (`detailBox`). Karibia har en egen fil, `land-carib.json` (Natural Earth 10m), og samme område er
+  fjernet fra `land-rest.json`. Begge lages av `scripts/build-carib-land.sh`.
 
 Animasjonen styres av `data-voyage="N"` på seksjonene. Når midten av en seksjon står midt på
 skjermen, er animasjonen på steg N:
@@ -46,15 +49,11 @@ skjermen, er animasjonen på steg N:
 | 0 | Kloden snurrer |
 | 1 | Kloden har stoppet over Oslo |
 | 2 | Zoomet inn, båten ligger i Oslo |
-| 3–15 | Båten ligger i havn nr. 2–14 (Skagen … Tenerife) |
-| 16 | Zoomet ut, hele ruta vises |
+| 3–16 | Båten ligger i havn nr. 2–15 (Skagen … Tenerife, Barbados) |
+| 17 | Zoomet ut, hele ruta vises |
 
 Legger du til eller fjerner en havn, flytter stegene etter den seg tilsvarende, så husk å
 justere `data-voyage` på seksjonene.
-
-## Ting som gjenstår
-
-- Bytt ut placeholder-prosjektkortet («Under arbeid») når neste prosjekt er klart.
 
 ## Deploy
 

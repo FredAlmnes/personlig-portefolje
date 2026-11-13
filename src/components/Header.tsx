@@ -11,25 +11,22 @@ const navLinks = [
 
 export default function Header() {
   return (
-    <header className="fixed top-0 inset-x-0 z-50 border-b border-border bg-bg/80 backdrop-blur">
-      <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
-        <a href="#top" className="flex items-center gap-2.5 text-sm text-muted">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-fill text-white font-display font-bold text-sm">
-            FA
-          </span>
-          <span className="hidden sm:inline">{person.fullName}</span>
+    <header className="fixed top-0 inset-x-0 z-50 border-b border-border bg-bg/70 backdrop-blur">
+      <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between gap-6">
+        <a
+          href="#top"
+          className="font-serif text-base md:text-lg text-fg tracking-tight hover:text-accent transition-colors"
+        >
+          {person.fullName}
         </a>
-        <nav className="hidden md:flex items-center gap-8 text-sm text-muted">
+        <nav className="hidden md:flex items-center gap-7 text-sm text-muted">
           {navLinks.map((link) => (
             <a key={link.href} href={link.href} className="hover:text-fg transition-colors">
               {link.label}
             </a>
           ))}
         </nav>
-        <a
-          href="#contact"
-          className="rounded-full bg-accent-fill text-white px-4 py-2 text-sm font-medium hover:bg-accent-fill-hover transition-colors"
-        >
+        <a href="#contact" className="link shrink-0 text-sm">
           Ta kontakt
         </a>
       </div>

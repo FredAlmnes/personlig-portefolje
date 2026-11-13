@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Seiltur-bakgrunn: Oslo -> Tenerife
+   Seiltur-bakgrunn: Oslo -> Tenerife -> Barbados
    --------------------------------------------------------------------------
    - Elementet som sendes inn til initVoyage() må inneholde to <canvas>:
      .voyage-map (kart) og .voyage-overlay (rute, havner, båt).
@@ -8,8 +8,8 @@
         0  = kloden snurrer
         1  = kloden har stoppet over Oslo
         2  = zoomet inn, båten ligger i Oslo
-        3..15 = båten ligger i havn nr. 2..14 (Skagen ... Tenerife)
-        16 = zoomet ut, hele ruta vises
+        3..16 = båten ligger i havn nr. 2..15 (Skagen ... Tenerife, Barbados)
+        17 = zoomet ut, hele ruta vises
      (Generelt: havn nr. i ligger på steg i + 1, og oversikten kommer ett
      steg etter siste havn.)
      Mellom to steg glir animasjonen jevnt. Mangler data-voyage helt,
@@ -78,6 +78,8 @@ const CONFIG = {
     { name: "Lisboa", country: "Portugal", at: [-9.14, 38.698], side: "r" },
     { name: "Faro", country: "Portugal", at: [-7.925, 36.995], side: "r" },
     { name: "Tenerife", country: "Kanariøyene", at: [-16.225, 28.465], side: "b" },
+    // Carlisle Bay ved Bridgetown
+    { name: "Barbados", country: "Karibia", at: [-59.64, 13.08], side: "b" },
   ] as Stop[],
   // Veipunkter mellom havnene (lengdegrad, breddegrad), sjekket mot kystlinja.
   via: [
@@ -94,6 +96,8 @@ const CONFIG = {
     [[-9.40,38.678],[-9.34,38.668],[-9.30,38.672],[-9.25,38.688],[-9.18,38.694]],
     [[-9.18,38.694],[-9.25,38.686],[-9.33,38.670],[-9.42,38.62],[-9.35,38.40],[-9.00,37.80],[-9.10,37.10],[-8.95,36.90],[-8.40,36.975],[-8.05,36.975]],
     [[-7.96,36.992],[-8.01,36.975],[-8.04,36.94],[-8.30,36.60],[-10.5,34.3],[-13.2,31.0],[-15.2,29.2],[-16.0,28.62],[-16.10,28.52],[-16.18,28.49],[-16.21,28.472]],
+    // Over Atlanterhavet i passaten: sørover til ca. 20° N, så vestover og rundt South Point inn til Carlisle Bay
+    [[-16.20,28.44],[-16.21,28.38],[-16.30,28.24],[-16.45,28.02],[-16.75,27.82],[-17.6,27.3],[-19.0,26.0],[-21.5,23.6],[-25.0,20.8],[-30,18.3],[-37,16.3],[-45,14.9],[-52,13.9],[-57,13.3],[-58.9,13.0],[-59.35,12.96],[-59.55,12.99],[-59.65,13.03],[-59.655,13.065]],
   ] as LonLat[][],
   // Nordsjøkanalen inn til Amsterdam (for smal for kystdataene, tegnes som vann)
   canals: [[[4.54,52.463],[4.62,52.46],[4.70,52.435],[4.78,52.42],[4.84,52.405],[4.90,52.382]]] as LonLat[][],
@@ -104,12 +108,18 @@ const CONFIG = {
     { name: "Den engelske kanal", at: [-1.7, 50.38], angle: -4 },
     { name: "Biscayabukta", at: [-4.7, 45.6], angle: 0, size: 1.1 },
     { name: "Atlanterhavet", at: [-14.2, 40.2], angle: 0, size: 1.35 },
+    { name: "Atlanterhavet", at: [-38, 20.6], angle: -6, size: 1.5 },
+    { name: "Karibhavet", at: [-66.5, 14.6], angle: 0, size: 1.2 },
   ] as Sea[],
   spins: 2, // hele omdreininger før kloden stopper over Oslo
   idleSpeed: 6, // grader per sekund mens man står helt øverst
   startTilt: 24, // breddegraden kloden peker mot før den snurrer
   dwell: 0.18, // hvor lenge båten ligger i havn (andel av hver etappe)
   detailBox: [-32, 18, 38, 76] as Box,
+  // Karibia ligger utenfor detaljkartet og har egne data (scripts/build-carib-land.sh).
+  // Boksen er fjernet fra land-rest.json, så kystene ikke tegnes dobbelt.
+  caribBox: [-76, 2, -44, 22] as Box,
+  maxZoomOut: 3.6, // hvor mye kameraet kan zoome ut midt på en lang etappe
   dataUrl: "/voyage",
 };
 
@@ -165,18 +175,21 @@ function cssFont(varName: string, fallback: string) {
 const GRID_STEP = 4; // detaljkartet er delt i ruter på 4 x 4 grader
 
 // Kystlinjer uten de kunstige kantene der datasettene er klippet sammen
+const CUT_BOXES = () => [CONFIG.detailBox, CONFIG.caribBox];
 function onGrid(v: number, o: number) {
   const r = (v - o) / GRID_STEP;
   return Math.abs(r - Math.round(r)) * GRID_STEP < 0.0008;
 }
-function coastOf(fc: LandFC | Feature, box: Box, tiled = false): MultiLineString {
-  const e = 0.02, lons = [box[0], box[2], -180, 180], lats = [box[1], box[3], -90, 90];
+function coastOf(fc: LandFC | Feature, boxes: Box[], tiled = false): MultiLineString {
+  const e = 0.02, box = boxes[0];
+  const lons = [-180, 180, ...boxes.flatMap((b) => [b[0], b[2]])];
+  const lats = [-90, 90, ...boxes.flatMap((b) => [b[1], b[3]])];
   function same(p: Position, q: Position) {
     if (tiled) {
       if (Math.abs(p[0] - q[0]) < 0.0008 && onGrid(p[0], box[0]) && onGrid(q[0], box[0])) return true;
       if (Math.abs(p[1] - q[1]) < 0.0008 && onGrid(p[1], box[1]) && onGrid(q[1], box[1])) return true;
     }
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < lons.length; i++) {
       if (Math.abs(p[0] - lons[i]) < e && Math.abs(q[0] - lons[i]) < e) return true;
       if (Math.abs(p[1] - lats[i]) < e && Math.abs(q[1] - lats[i]) < e) return true;
     }
@@ -215,7 +228,7 @@ async function loadLand(name: string, signal: AbortSignal): Promise<LandFC> {
 }
 
 function tilesOf(fc: LandFC): Tile[] {
-  return fc.features.map((f) => ({ b: f.properties!.b!, land: f, coast: coastOf(f, CONFIG.detailBox, true) }));
+  return fc.features.map((f) => ({ b: f.properties!.b!, land: f, coast: coastOf(f, [CONFIG.detailBox], true) }));
 }
 
 /* ------------------------------- ruta -------------------------------- */
@@ -252,7 +265,7 @@ const bounds = geoBounds(ROUTE);
 const OV_CENTER: LonLat = [(bounds[0][0] + bounds[1][0]) / 2, (bounds[0][1] + bounds[1][1]) / 2];
 const SPHERE = { type: "Sphere" } as const;
 const GRID_COARSE = geoGraticule().step([15, 15])();
-const GRID_FINE = geoGraticule().extent([[-44, 14], [48, 80]]).step([2, 2]).precision(1)();
+const GRID_FINE = geoGraticule().extent([[-80, 0], [48, 80]]).step([2, 2]).precision(1)();
 
 function pointAt(d: number): [number, number, number] {
   d = clamp(d, 0, TOTAL);
@@ -291,7 +304,22 @@ export function initVoyage(el: HTMLElement): () => void {
   // Grovkartene (hele kloden) trengs først; detaljene kommer når de kommer.
   let FAR: { land: LandFC; coast: MultiLineString } | null = null;
   let LITE: { land: LandFC; coast: MultiLineString } | null = null;
-  let REST: RestPoly[] = [];
+  let REST: RestPoly[] = [], CARIB: RestPoly[] = [];
+  function splitPolys(fc: LandFC): RestPoly[] {
+    const out: RestPoly[] = [];
+    fc.features.forEach((f) => {
+      const g = f.geometry;
+      if (!g || (g.type !== "Polygon" && g.type !== "MultiPolygon")) return;
+      (g.type === "Polygon" ? [g.coordinates] : g.coordinates).forEach((poly) => {
+        const feat: Feature<Polygon> = { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: poly } };
+        const ctr = geoCentroid(feat) as LonLat;
+        let rad = 0;
+        poly[0].forEach((p) => { rad = Math.max(rad, geoDistance(ctr, p as LonLat)); });
+        out.push({ c: ctr, r: rad, land: feat, coast: coastOf(feat, CUT_BOXES()) });
+      });
+    });
+    return out;
+  }
   const TILES: { detail: Tile[] | null; mid: Tile[] | null } = { detail: null, mid: null };
 
   const loadErr = (err: unknown) => {
@@ -300,26 +328,24 @@ export function initVoyage(el: HTMLElement): () => void {
   Promise.all([loadLand("far", abort.signal), loadLand("rest", abort.signal)])
     .then(([far, rest]) => {
       if (destroyed) return;
-      FAR = { land: far, coast: coastOf(far, CONFIG.detailBox) };
+      FAR = { land: far, coast: coastOf(far, CUT_BOXES()) };
       // Resten av verden delt opp i enkeltpolygoner, så baksiden av kloden kan hoppes over
-      REST = [];
-      rest.features.forEach((f) => {
-        const g = f.geometry;
-        if (!g || (g.type !== "Polygon" && g.type !== "MultiPolygon")) return;
-        (g.type === "Polygon" ? [g.coordinates] : g.coordinates).forEach((poly) => {
-          const feat: Feature<Polygon> = { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: poly } };
-          const ctr = geoCentroid(feat) as LonLat;
-          let rad = 0;
-          poly[0].forEach((p) => { rad = Math.max(rad, geoDistance(ctr, p as LonLat)); });
-          REST.push({ c: ctr, r: rad, land: feat, coast: coastOf(feat, CONFIG.detailBox) });
-        });
-      });
+      REST = [...splitPolys(rest), ...CARIB];
       mapKey = "";
       el.dataset.ready = "";
     })
     .catch(loadErr);
+  // Karibia: tegnes alltid sammen med resten av verden (lite nok til å ikke trenge detaljnivåer)
+  loadLand("carib", abort.signal)
+    .then((carib) => {
+      if (destroyed) return;
+      CARIB = splitPolys(carib);
+      if (REST.length) REST = [...REST, ...CARIB];
+      mapKey = "";
+    })
+    .catch(loadErr);
   loadLand("lite", abort.signal)
-    .then((lite) => { if (!destroyed) { LITE = { land: lite, coast: coastOf(lite, CONFIG.detailBox) }; mapKey = ""; } })
+    .then((lite) => { if (!destroyed) { LITE = { land: lite, coast: coastOf(lite, CUT_BOXES()) }; mapKey = ""; } })
     .catch(loadErr);
   loadLand("mid", abort.signal)
     .then((mid) => { if (!destroyed) { TILES.mid = tilesOf(mid); mapKey = ""; } })
@@ -345,15 +371,15 @@ export function initVoyage(el: HTMLElement): () => void {
 
   let SANS = "", SERIF = "";
   function readFonts() {
-    SANS = cssFont("--font-display", '"Arial Narrow", Arial, sans-serif');
-    SERIF = cssFont("--font-body", "Georgia, serif");
+    SANS = cssFont("--font-body", "Arial, sans-serif");
+    SERIF = cssFont("--font-serif", "Georgia, serif");
   }
   readFonts();
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Siden har bare lyst tema i dag. Kartet følger likevel data-theme="dark"
-  // eller klassen .dark på <html>, så det henger med om mørk modus kommer.
+  // Kartet følger data-theme="dark" (eller klassen .dark) på <html>, og bytter
+  // palett hvis temaet endres mens siden er åpen.
   const root = document.documentElement;
   const themeName = () =>
     root.getAttribute("data-theme") === "dark" || root.classList.contains("dark") ? "night" : "day";
@@ -377,7 +403,7 @@ export function initVoyage(el: HTMLElement): () => void {
     R = wide ? Math.min(H * 0.36, W * 0.27) : Math.min(W * 0.42, H * 0.24);
     kStop = 5.2 * Math.min(H, W * 1.1);
     const ext: [[number, number], [number, number]] = wide
-      ? [[W * 0.4, H * 0.09], [W * 0.95, H * 0.88]]
+      ? [[W * 0.56, H * 0.12], [W * 0.9, H * 0.86]] // høyre for tekstkolonnen (som slutter ved ca. 0.52 W)
       : [[W * 0.12, H * 0.08], [W * 0.88, H * 0.5]];
     const tmp = geoOrthographic().rotate([-OV_CENTER[0], -OV_CENTER[1]]).fitExtent(ext, ROUTE);
     kOv = tmp.scale(); tOv = tmp.translate();
@@ -432,7 +458,7 @@ export function initVoyage(el: HTMLElement): () => void {
       const s = smoother(clamp((u2 - CONFIG.dwell) / (1 - 2 * CONFIG.dwell)));
       const d = stopKm[leg] + s * legKm[leg];
       const p = pointAt(d);
-      const zf = clamp(legKm[leg] / 420, 1, 2.8), sn = Math.sin(Math.PI * s);
+      const zf = clamp(legKm[leg] / 420, 1, CONFIG.maxZoomOut), sn = Math.sin(Math.PI * s);
       cam.k = kStop / (1 + (zf - 1) * sn * sn);
       cam.rot = [-p[0], -p[1], 0];
       cam.boatD = d; cam.leg = leg; cam.s = s;
