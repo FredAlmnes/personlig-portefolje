@@ -572,12 +572,20 @@ export function initVoyage(el: HTMLElement): () => void {
       const cx = cam.tr[0], cy = cam.tr[1], r = cam.k;
       c.save();
       c.beginPath(); mapPath(SPHERE); c.clip();
-      const g = c.createRadialGradient(cx - r * 0.38, cy - r * 0.42, r * 0.04, cx, cy, r * 1.02);
-      g.addColorStop(0, "rgba(255,255,255," + PAL.glint + ")");
-      g.addColorStop(0.5, "rgba(255,255,255,0)");
-      g.addColorStop(1, rgba(PAL.shadow, 0.3));
       c.globalAlpha = 1 - z;
-      c.fillStyle = g; c.fillRect(0, 0, W, H);
+      // mørkere mot kanten, sentrert så det ikke blir en forskjøvet indre sirkel
+      const limb = c.createRadialGradient(cx, cy, r * 0.55, cx, cy, r);
+      limb.addColorStop(0, rgba(PAL.shadow, 0));
+      limb.addColorStop(0.6, rgba(PAL.shadow, 0.12));
+      limb.addColorStop(1, rgba(PAL.shadow, 0.3));
+      c.fillStyle = limb; c.fillRect(0, 0, W, H);
+      // høylys oppe til venstre som toner rolig ut
+      const hx = cx - r * 0.38, hy = cy - r * 0.42;
+      const glint = c.createRadialGradient(hx, hy, 0, hx, hy, r * 1.1);
+      glint.addColorStop(0, "rgba(255,255,255," + PAL.glint + ")");
+      glint.addColorStop(0.35, "rgba(255,255,255," + PAL.glint * 0.35 + ")");
+      glint.addColorStop(1, "rgba(255,255,255,0)");
+      c.fillStyle = glint; c.fillRect(0, 0, W, H);
       c.restore();
       c.beginPath(); mapPath(SPHERE);
       c.strokeStyle = rgba(PAL.rim, 1 - z); c.lineWidth = 1; c.stroke();
